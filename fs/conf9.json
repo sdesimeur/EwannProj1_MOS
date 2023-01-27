@@ -1,0 +1,80 @@
+{
+  "debug": {
+    "event_level": 2,
+    "factory_reset_gpio": -1,
+    "file_level": "",
+    "level": 2,
+    "mg_mgr_hexdump_file": "",
+    "udp_log_addr": "192.168.4.152:65535",
+    "udp_log_level": 2
+  },
+  "wifi": {
+    "ap": {
+      "enable": true,
+      "ssid": "ewann",
+      "pass": "",
+      "hidden": false,
+      "channel": 6,
+      "max_connections": 10,
+      "ip": "192.169.169.1",
+      "netmask": "255.255.255.0",
+      "gw": "192.169.169.1",
+      "dhcp_start": "192.169.169.2",
+      "dhcp_end": "192.169.169.100",
+      "trigger_on_gpio": -1,
+      "disable_after": 0,
+      "hostname": "",
+      "keep_enabled": true
+    },
+    "sta": {
+      "enable": true,
+      "dhcp_hostname": "",
+      "ssid": "gHome",
+      "pass": "k8PsAx61|16xAsP8k|k8PsAx61|16xAsP8k|k8PsAx61|16xAsP8k",
+      "ip": "192.168.4.245",
+      "netmask": "255.255.255.0",
+      "gw": "192.168.4.1",
+      "keep_enabled": true
+    }
+  },
+  "http": {
+    "document_root": "/",
+    "enable": true,
+    "hidden_files": "",
+    "listen_addr": "80",
+    "ssl_ca_cert": "",
+    "ssl_cert": "",
+    "ssl_key": "",
+    "upload_acl": "*"
+  },
+  "i2c": {
+    "enable": true,
+    "debug": true,
+    "sda_gpio": 12,
+    "scl_gpio": 14,
+    "freq": 400000
+  },
+  "i2c1": {
+    "enable": false,
+    "debug": false,
+    "sda_gpio": 4,
+    "scl_gpio": 5,
+    "freq": 100000
+  },
+  "rpc": {
+    "enable": true,
+    "uart_enable": true,
+    "max_frame_size": 4096,
+    "max_queue_length": 25,
+    "default_out_channel_idle_close_timeout": 10
+  },
+  "device": {
+    "id": "Ewann"
+  },
+  "provision": {
+    "magnetmean": 0
+  },
+  "mjs": {
+    "generate_jsc": true
+  }
+}

@@ -1,0 +1,222 @@
+<html>
+<script type="text/javascript">
+  function connectFileInputs(fnId, ffId) {
+    var fni = document.getElementById(fnId);
+    var ffi = document.getElementById(ffId);
+    fni.onclick = function() { ffi.click(); };
+    ffi.onchange = function() { fni.placeholder = ffi.value; };
+    if (ffi.value != "") fni.placeholder = ffi.value;
+  }
+function sendData(form) {
+  var XHR = new XMLHttpRequest();
+  var dataTxt;
+  var dataJSON = {};
+  var action = document.getElementById(form).action;
+    if (document.getElementById(form).querySelector("[name=filename]") !== null) {
+        dataJSON.filename = document.getElementById(form).querySelector("[name=filename]").value;
+    }
+    if (document.getElementById(form).querySelector("#filetxt") !== null) {
+        dataJSON.data = btoa(document.getElementById(form).querySelector("#filetxt").value);
+    }
+    if (form === "file_download_form") {
+        document.getElementById('filename_send').value = document.getElementById(form).querySelector("[name=filename]").value;
+    } else {
+        document.getElementById('filename_send').value = "";
+    }
+  dataTxt = JSON.stringify (dataJSON);
+  document.getElementById('filetxt').value = "";
+
+  // Définissez ce qui se passe en cas de succès de soumission de données
+  XHR.addEventListener('load', function(event) {
+      if (event.target.responseURL.endsWith("rpc/FS.Get")) {
+          if (event.target.response.includes('"data":')) {
+            var tmp = atob(JSON.parse(event.target.response).data);
+            if (tmp.startsWith("{")) {
+                document.getElementById('filetxt').value = JSON.stringify(JSON.parse(tmp), undefined, 4);
+            } else {
+                document.getElementById('filetxt').value = tmp;
+            }
+          } else {
+              alert (event.target.response);
+          }
+      } else if (event.target.responseURL.endsWith("rpc/FS.List")) {
+        document.getElementById('filetxt').value = JSON.stringify(JSON.parse(event.target.response), undefined, 4);
+      } else if (event.target.responseURL.endsWith("rpc/RPC.List")) {
+        document.getElementById('filetxt').value = JSON.stringify(JSON.parse(event.target.response), undefined, 4);
+      } else if (event.target.responseURL.endsWith("rpc/FS.Put")) {
+        alert (JSON.stringify(event));
+      }
+      //var tab = window.open("data:text/txt;charset=utf-8," + encodeURIComponent(atob(JSON.parse(event.target.response).data)), '_blank');
+      //tab.focus();
+    //alert(atob(JSON.parse(event.target.response).data));
+  });
+
+  // Définissez ce qui arrive en cas d'erreur
+  XHR.addEventListener('error', function(event) {
+    alert('Oups! Quelque chose s\'est mal passé.');
+  });
+
+  // Configurez la requête
+  XHR.open('POST', action);
+
+  // Ajoutez l'en-tête HTTP requise pour requêtes POST de données de formulaire
+  XHR.setRequestHeader('Content-Type', 'plain/text');
+
+  // Finalement, envoyez les données.
+  XHR.send(dataTxt);
+}
+</script>
+<body>
+  <h1>Welcome to Mongoose OS</h1>
+
+  <ul>
+    <li>Check out
+    <a href="https://github.com/cesanta/mongoose-os/tree/master/fw/examples/c_web_config">c_web_config</a>
+    example to see how to implement device configuration Web UI.</li>
+
+    <li>Use <code>curl</code> to push new firmware: <code>curl -v -k --digest --user user:password -F file=@build/fw.zip -F commit_timeout=60 http://IP_ADDR/update</code></li>
+    <li>Use <code>curl</code> to upload new file: <code>curl -v -k --digest --user user:password -F file=@build/file -F commit_timeout=60 http://IP_ADDR/upload</code></li>
+    <li>Use <code>curl</code> to pull new firmware: <code>curl -v -k --digest --user user:password 'http://IP_ADDR/update?url=NEW_URL/fw-esp8266.zip&commit_timeout=120&ignore_same_version=0'</code> </li>
+    <li>Use <code>wget</code> to get RPC.List: <code>wget --no-check-certificate -O - --user=xxxx --password=xxxx  'http://IP_ADDR/rpc/RPC.List'</code> </li>
+    <li>Use <code>wget</code> to get a file: <code>wget --no-check-certificate -O - --user=xxxx --password=xxxx --post-data='{"filename": "index.html"}' 'http://IP_ADDR/rpc/FS.List'</code> </li>
+    <li>Use <code>wget</code> to remove a file: <code>wget --no-check-certificate -O - --user=xxxx --password=xxxx --post-data='{"filename": "index.html"}' 'http://IP_ADDR/rpc/FS.Remove'</code> </li>
+  
+    <li>Use rpc/SYS.Reboot</li>
+  
+  </lu>
+
+
+  <div class="row">
+    <fieldset>
+      <legend>Reboot</legend>
+
+      <form id="reboot_form" method="POST" action="/rpc/SYS.Reboot">
+        <button class="button orange" id="reboot_button" type="button" onclick="sendData('reboot_form')">
+          Reboot
+        </button>
+      </form>
+    </fieldset>
+  </div>
+
+  
+  <div class="row">
+    <fieldset>
+      <legend>List commands</legend>
+
+      <form id="commands_list_form" method="POST" action="/rpc/RPC.List">
+        <button class="button orange" id="commands_list_button" type="button" onclick="sendData('commands_list_form')">
+          List commands
+        </button>
+      </form>
+
+    </fieldset>
+  </div>
+
+  
+  
+  <div class="row">
+    <fieldset>
+      <legend>Upload new firmware</legend>
+
+      <form id="fw_upload_form" method="POST" action="/update"
+         enctype="multipart/form-data">
+        <input type="file" id="fw_select_file" name="file" accept=".zip">
+        <button class="button orange" id="fw_upload_button" type="submit">
+          Upload
+        </button>
+      </form>
+
+    </fieldset>
+  </div>
+  
+  <div class="row">
+    <fieldset>
+      <legend>Upload a file</legend>
+
+      <form id="file_upload_form" method="POST" action="/upload"
+         enctype="multipart/form-data" target="_blank">
+        <input type="file" id="select_file" name="select_file">
+        <button class="button orange" id="file_upload_button" type="submit">
+          Upload
+        </button>
+      </form>
+
+    </fieldset>
+  </div>
+
+  <div class="row">
+    <fieldset>
+      <legend>List files</legend>
+
+      <form id="file_list_form" method="POST" action="/rpc/FS.List">
+        <button class="button orange" id="file_list_button" type="button" onclick="sendData('file_list_form')">
+          List files
+        </button>
+      </form>
+
+    </fieldset>
+  </div>
+
+ <div class="row">
+    <fieldset>
+      <legend>Download a file</legend>
+
+      <form id="file_download_form" method="POST" action="/rpc/FS.Get">
+        <input type="text" id="filename_download" name="filename">
+        <button class="button orange" id="file_download_button" type="button" onclick="sendData('file_download_form')">
+          Download
+        </button>
+      </form>
+
+    </fieldset>
+  </div>
+
+  <div class="row">
+    <fieldset>
+      <legend>Remove a file</legend>
+
+      <form id="file_remove_form" method="POST" action="/rpc/FS.Remove">
+        <input type="text" id="filename_remove" name="filename">
+        <button class="button orange" id="file_remove_button" type="button" onclick="sendData('file_remove_form')">
+          Remove
+        </button>
+      </form>
+
+    </fieldset>
+  </div>
+
+  <div class="row">
+    <fieldset>
+      <legend>Send a file</legend>
+      <form id="file_send_form" method="POST" action="/rpc/FS.Put">
+          <input type="text" id="filename_send" name="filename">
+        <button class="button orange" id="file_send_button" type="button" onclick="sendData('file_send_form')">
+            Send
+        </button><br>
+          <textarea id="filetxt" cols=80 rows=100></textarea>
+      </form>
+    </fieldset>
+  </div>
+<!--  <div class="row">
+    <fieldset>
+      <legend>Upload new firmware</legend>
+
+      <form id="fw_upload_form" method="POST" action="/update" target="_blank"
+         enctype="multipart/form-data">
+        <input placeholder="Select .zip firmware archive ..."
+          id="fw_select_name" type="text">
+        <input type="file" id="fw_select_file" name="file" accept=".zip" style="display: none">
+        <button class="button orange" id="fw_upload_button" type="submit">
+          Upload
+        </button>
+      </form>
+
+    </fieldset>
+    <script type="text/javascript">
+      connectFileInputs('fw_select_name', 'fw_select_file');
+    </script>
+</div> -->
+
+
+</body>
+</html>
