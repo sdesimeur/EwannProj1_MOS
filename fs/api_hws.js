@@ -47,12 +47,13 @@ let HWS={
  start2: function () {
  },
  start1: function () {
-  ADC.enable(HWS.pinADC);
-  Timer.set(100, 0, HWS.start2, null);
+  //ADC.enable(HWS.pinADC);
+  HWS.readPin();
   GPIO.set_button_handler(HWS.pinINT1, GPIO.PULL_DOWN, GPIO.INT_EDGE_ANY, 20, HWS.handleInterrupt, null);
   GPIO.enable_int(HWS.pinINT1);
-  GPIO.set_button_handler(HWS.pinINT2, GPIO.PULL_DOWN, GPIO.INT_EDGE_ANY, 20, HWS.handleInterrupt, null);
-  GPIO.enable_int(HWS.pinINT2);
+  //GPIO.set_button_handler(HWS.pinINT2, GPIO.PULL_DOWN, GPIO.INT_EDGE_ANY, 20, HWS.handleInterrupt, null);
+  //GPIO.enable_int(HWS.pinINT2);
+  Timer.set(100, 0, HWS.start2, null);
  },
  readPin: function () {
     Log.warn("value : " + JSON.stringify(GPIO.read(HWS.pinINT1)));
@@ -64,7 +65,7 @@ let HWS={
   GPIO.set_mode(HWS.pinINT2, GPIO.MODE_INPUT);
   GPIO.set_mode(HWS.pinOUT1, GPIO.MODE_OUTPUT);
   GPIO.set_mode(HWS.pinOUT2, GPIO.MODE_OUTPUT);
-  Timer.set(1000, 1 HWS.readPin, null);
+  //Timer.set(1000, 1 HWS.readPin, null);
   Timer.set(1000, 0, HWS.start1, null);
  }
 };
