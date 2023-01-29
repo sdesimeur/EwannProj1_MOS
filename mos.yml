@@ -3,9 +3,13 @@ description: A JS-enabled demo Mongoose OS firmware
 # arch: PLATFORM
 version: 1.0
 manifest_version: 2017-05-18
-libs_version: ${mos.version}
-modules_version: ${mos.version}
-mongoose_os_version: ${mos.version}
+#libs_version: ${mos.version}
+#modules_version: ${mos.version}
+#mongoose_os_version: ${mos.version}
+libs_version: 2.19.1 #${mos.version}
+modules_version: 2.19.1 #${mos.version}
+mongoose_os_version: 2.19.1 #${mos.version}
+platform: esp8266
 
 config_schema:
   - ["mqtt.server", "mqtt.eclipseprojects.io:1883"]
