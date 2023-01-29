@@ -9,7 +9,10 @@ load('api_config.js');
 
 let HWS={
  pinADC: 0,
- pinINT: 4,
+ pinINT1: 4,
+ pinINT2: 5,
+ pinOUT1: 15,
+ pinOUT2: 13,
 
  square: function (a) {
   return a*a;
@@ -38,25 +41,31 @@ let HWS={
   return str;
  },
  handleInterrupt: function (pin) {
-     Log.warn("Valeur de la pin " + pin + " = " + GPIO.read(pin));
+   Log.warn("Valeur de la pin " + pin + " = " + GPIO.read(pin));
+   GPIO.write((pin===4)?HWS.pinOUT1:HWS.pinOUT2, GPIO.read(pin));
  },
  start2: function () {
-  GPIO.set_button_handler(HWS.pinINT, GPIO.PULL_DOWN, GPIO.INT_EDGE_ANY, 20, HWS.handleInterrupt, null);
-  GPIO.enable_int(HWS.pinINT);
  },
  start1: function () {
   ADC.enable(HWS.pinADC);
   Timer.set(100, 0, HWS.start2, null);
+  GPIO.set_button_handler(HWS.pinINT1, GPIO.PULL_DOWN, GPIO.INT_EDGE_ANY, 20, HWS.handleInterrupt, null);
+  GPIO.enable_int(HWS.pinINT1);
+  GPIO.set_button_handler(HWS.pinINT2, GPIO.PULL_DOWN, GPIO.INT_EDGE_ANY, 20, HWS.handleInterrupt, null);
+  GPIO.enable_int(HWS.pinINT2);
  },
  readPin: function () {
-    Log.warn("value : " + JSON.stringify(GPIO.read(HWS.pinINT)));
+    Log.warn("value : " + JSON.stringify(GPIO.read(HWS.pinINT1)));
  },
  start: function () {
   //let t=Cfg.get('provision.magnetmean');
   //Log.warn("############### Value:"+JSON.stringify(t));
-  GPIO.set_mode(HWS.pinINT, GPIO.MODE_INPUT);
-  Timer.set(500, 1 HWS.readPin, null);
-  //Timer.set(5000, 0, HWS.start1, null);
+  GPIO.set_mode(HWS.pinINT1, GPIO.MODE_INPUT);
+  GPIO.set_mode(HWS.pinINT2, GPIO.MODE_INPUT);
+  GPIO.set_mode(HWS.pinOUT1, GPIO.MODE_OUTPUT);
+  GPIO.set_mode(HWS.pinOUT2, GPIO.MODE_OUTPUT);
+  Timer.set(1000, 1 HWS.readPin, null);
+  Timer.set(1000, 0, HWS.start1, null);
  }
 };
 
