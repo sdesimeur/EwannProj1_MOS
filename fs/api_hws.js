@@ -41,7 +41,7 @@ let HWS={
   return str;
  },
  handleInterrupt: function (pin) {
-   Log.warn("Valeur de la pin " + pin + " = " + GPIO.read(pin));
+   Log.warn("Valeur de la pin " + JSON.stringify(pin) + " = " + JSON.stringify(GPIO.read(pin)));
    GPIO.write((pin===4)?HWS.pinOUT1:HWS.pinOUT2, GPIO.read(pin));
  },
  start2: function () {
@@ -56,7 +56,8 @@ let HWS={
   Timer.set(100, 0, HWS.start2, null);
  },
  readPin: function () {
-    Log.warn("value : " + JSON.stringify(GPIO.read(HWS.pinINT1)));
+    //Log.warn("value : " + JSON.stringify(GPIO.read(HWS.pinINT1)));
+    HWS.handleInterrupt(HWS.pinINT1);
  },
  start: function () {
   //let t=Cfg.get('provision.magnetmean');
@@ -65,8 +66,8 @@ let HWS={
   GPIO.set_mode(HWS.pinINT2, GPIO.MODE_INPUT);
   GPIO.set_mode(HWS.pinOUT1, GPIO.MODE_OUTPUT);
   GPIO.set_mode(HWS.pinOUT2, GPIO.MODE_OUTPUT);
-  //Timer.set(1000, 1 HWS.readPin, null);
-  Timer.set(1000, 0, HWS.start1, null);
+  Timer.set(1000, 1 HWS.readPin, null);
+  //Timer.set(1000, 0, HWS.start1, null);
  }
 };
 
