@@ -41,15 +41,19 @@ let HWS={
   return str;
  },
  handleInterrupt: function (pin) {
+   //GPIO.disable_int(pin);
+   //GPIO.clear_int(pin);
    Log.warn("Valeur de la pin " + JSON.stringify(pin) + " = " + JSON.stringify(GPIO.read(pin)));
    GPIO.write((pin===4)?HWS.pinOUT1:HWS.pinOUT2, GPIO.read(pin));
+   //GPIO.enable_int(pin);
  },
  start2: function () {
  },
  start1: function () {
   //ADC.enable(HWS.pinADC);
   HWS.readPin();
-  GPIO.set_button_handler(HWS.pinINT1, GPIO.PULL_DOWN, GPIO.INT_EDGE_ANY, 20, HWS.handleInterrupt, null);
+  GPIO.set_button_handler(HWS.pinINT1, GPIO.PULL_NONE, GPIO.INT_EDGE_ANY, 10, HWS.handleInterrupt, null);
+  //GPIO.set_int_handler(HWS.pinINT1, GPIO.INT_EDGE_ANY, HWS.handleInterrupt, null);
   GPIO.enable_int(HWS.pinINT1);
   //GPIO.set_button_handler(HWS.pinINT2, GPIO.PULL_DOWN, GPIO.INT_EDGE_ANY, 20, HWS.handleInterrupt, null);
   //GPIO.enable_int(HWS.pinINT2);
@@ -66,8 +70,8 @@ let HWS={
   GPIO.set_mode(HWS.pinINT2, GPIO.MODE_INPUT);
   GPIO.set_mode(HWS.pinOUT1, GPIO.MODE_OUTPUT);
   GPIO.set_mode(HWS.pinOUT2, GPIO.MODE_OUTPUT);
-  Timer.set(1000, 1 HWS.readPin, null);
-  //Timer.set(1000, 0, HWS.start1, null);
+  //Timer.set(1000, 1 HWS.readPin, null);
+  Timer.set(1000, 0, HWS.start1, null);
  }
 };
 
