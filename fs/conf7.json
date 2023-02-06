@@ -1,0 +1,14 @@
+{
+  "wifi": {
+    "sta": {
+      "enable": true,
+      "dhcp_hostname": "",
+      "ssid": "",
+      "pass": "",
+      "ip": "",
+      "netmask": "",
+      "gw": "",
+      "keep_enabled": true
+    }
+  }
+}
