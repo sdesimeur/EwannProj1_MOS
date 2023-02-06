@@ -25,16 +25,6 @@
       "disable_after": 0,
       "hostname": "",
       "keep_enabled": true
-    },
-    "sta": {
-      "enable": true,
-      "dhcp_hostname": "",
-      "ssid": "gHome",
-      "pass": "k8PsAx61|16xAsP8k|k8PsAx61|16xAsP8k|k8PsAx61|16xAsP8k",
-      "ip": "192.168.4.246",
-      "netmask": "255.255.255.0",
-      "gw": "192.168.4.1",
-      "keep_enabled": true
     }
   },
   "http": {
