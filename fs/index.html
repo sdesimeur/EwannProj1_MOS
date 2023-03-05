@@ -4,26 +4,9 @@ function sendData(action, dataJSON) {
   var XHR = new XMLHttpRequest();
   var dataTxt = JSON.stringify(dataJSON);
   XHR.addEventListener('load', function(event) {
-      if (event.target.responseURL.endsWith("rpc/HWS.getSpeed")) {
-            var tmp = parseFloat(event.target.response);
-            var tmp1 = 3.6*tmp;
-          document.getElementById('speed').innerHTML = tmp + "m/s<br>" + tmp1 + "km/h";
-      }
-      else if (event.target.responseURL.endsWith("rpc/HWS.initAccelSpeed")) {
-          console.log(JSON.stringify(event.target.response));
-      }
-      else if (event.target.responseURL.endsWith("rpc/HWS.getMagnetField")) {
+      if (event.target.responseURL.endsWith("rpc/HWS.getMagnetField")) {
             var tmp = parseFloat(event.target.response);
           document.getElementById('magnet').innerHTML = tmp + "T";
-      }
-      else if (event.target.responseURL.endsWith("rpc/HWS.getAccel")) {
-            var tmp = parseFloat(event.target.response);
-            var tmp1 = tmp * 9.80655;
-          document.getElementById('accel').innerHTML = tmp+"g<br>"+tmp1+"m/s^2";
-      }
-      else if (event.target.responseURL.endsWith("rpc/HWS.getRawAccel")) {
-            var tmp = (event.target.response);
-          document.getElementById('accelRaw').innerHTML = tmp;
       }
 /*
       if (event.target.responseURL.endsWith("rpc/FS.Get")) {
@@ -42,9 +25,9 @@ function sendData(action, dataJSON) {
   });
 
   // Définissez ce qui arrive en cas d'erreur
-  XHR.addEventListener('error', function(event) {
+  /*XHR.addEventListener('error', function(event) {
     alert('Oups! Quelque chose s\'est mal passé.');
-  });
+  });*/
 
   // Configurez la requête
   XHR.open('POST', action);
@@ -60,17 +43,10 @@ function config_magneto_on_off () {
     var dataJSON = {magnetoOnOff: checkon};
     sendData("rpc/HWS.configMagneto", dataJSON);
 }
-function init_accel_speed () {
-    var dataJSON = {};
-    sendData("rpc/HWS.initAccelSpeed",dataJSON);
-}
 
 function read_all () {
     var dataJSON = {};
-    sendData("rpc/HWS.getSpeed",dataJSON);
     sendData("rpc/HWS.getMagnetField",dataJSON);
-    sendData("rpc/HWS.getAccel",dataJSON);
-    sendData("rpc/HWS.getRawAccel",dataJSON);
 }
 
 document.onreadystatechange = function () {
@@ -87,28 +63,8 @@ document.onreadystatechange = function () {
     <fieldset>
       <legend>Config magneto</legend>
         <input type="checkbox" id="switch_config" name="switch_config" onchange="config_magneto_on_off()">
+	<br>
+	Magnet field: <span id="magnet"></span>
     </fieldset>
-    <fieldset>
-      <legend>Init accel speed</legend>
-      <input type="button" id="button_init_accel_speed" name="button_init_accel_speed" onclick="init_accel_speed()" value="INIT">
-    </fieldset>
-    <fieldset>
-      <legend>Speed</legend>
-      <div id="speed" name="speed">
-      </div>
-    </fieldset>
-    <fieldset>
-      <legend>Magnet</legend>
-      <div id="magnet" name="magnet">
-      </div>
-    </fieldset>
-    <fieldset>
-      <legend>Accel</legend>
-      <div id="accel" name="accel">
-      </div>
-      <div id="accelRaw" name="accelRaw">
-      </div>
-    </fieldset>
-
 </body>
 </html>
