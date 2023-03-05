@@ -5,7 +5,7 @@
     "file_level": "",
     "level": 2,
     "mg_mgr_hexdump_file": "",
-    "udp_log_addr": "192.168.4.152:65535",
+    "udp_log_addr": "192.168.4.150:65535",
     "udp_log_level": 2
   },
   "wifi": {
@@ -16,24 +16,14 @@
       "hidden": false,
       "channel": 6,
       "max_connections": 10,
-      "ip": "192.169.169.1",
+      "ip": "192.246.169.1",
       "netmask": "255.255.255.0",
-      "gw": "192.169.169.1",
-      "dhcp_start": "192.169.169.2",
-      "dhcp_end": "192.169.169.100",
+      "gw": "192.246.169.1",
+      "dhcp_start": "192.246.169.2",
+      "dhcp_end": "192.246.169.100",
       "trigger_on_gpio": -1,
       "disable_after": 0,
       "hostname": "",
-      "keep_enabled": true
-    },
-    "sta": {
-      "enable": true,
-      "dhcp_hostname": "",
-      "ssid": "gHome",
-      "pass": "k8PsAx61|16xAsP8k|k8PsAx61|16xAsP8k|k8PsAx61|16xAsP8k",
-      "ip": "192.168.4.245",
-      "netmask": "255.255.255.0",
-      "gw": "192.168.4.1",
       "keep_enabled": true
     }
   },
